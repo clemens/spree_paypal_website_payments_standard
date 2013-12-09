@@ -65,7 +65,7 @@ module Spree
 
       if legit?
         if pending?
-          payment.pend!
+          payment.pend! unless payment.pending?
         elsif completed?
           payment.complete!
         else
