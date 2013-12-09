@@ -51,7 +51,7 @@ module Spree
     end
 
     def order
-      @order ||= Order.find(params['order_id'] || request.params['order_id'])
+      @order ||= Order.find_by_number!(params['order_id'] || request.params['order_id'])
     end
 
     def payment_method

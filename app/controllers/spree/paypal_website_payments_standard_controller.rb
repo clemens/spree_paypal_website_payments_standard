@@ -1,6 +1,8 @@
 module Spree
   # TODO can I use CheckoutController as a base?
   class PaypalWebsitePaymentsStandardController < StoreController
+    protect_from_forgery :except => :notify
+
     before_filter :set_order, :set_payment_method
 
     def pay
