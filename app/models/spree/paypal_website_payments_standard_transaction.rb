@@ -97,8 +97,8 @@ module Spree
     end
 
     def correct_amount?
-      # TODO
-      # order.try(:total_price) == amount
+      # TODO should also validate proper currency!
+      order.try(:total) == amount
     end
 
     def business
