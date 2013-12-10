@@ -117,7 +117,7 @@ module Spree
     end
 
     def payment_date
-      request.params['payment_date']
+      params['payment_date']
     end
 
     def amount
