@@ -4,7 +4,6 @@ class CreateSpreePaypalWebsitePaymentsStandardNotifications < ActiveRecord::Migr
       t.belongs_to :order
 
       t.string :transaction_id
-      t.string :payment_status
 
       t.text :query_string
       t.text :params

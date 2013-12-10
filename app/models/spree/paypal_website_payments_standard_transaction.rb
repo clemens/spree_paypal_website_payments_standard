@@ -44,9 +44,13 @@ module Spree
 
     def request=(request)
       @request = request
+
       self.params = request.params
       self.query_string = request.body.read
+
       self.order_id = order.id
+      self.transaction_id = params['txn_id']
+      self.payment_status = params['payment_status']
     end
 
     def payment
@@ -110,10 +114,6 @@ module Spree
 
     def business
       params['business']
-    end
-
-    def payment_status
-      params['payment_status']
     end
 
     def status
