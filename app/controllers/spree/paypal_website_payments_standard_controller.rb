@@ -17,7 +17,7 @@ module Spree
 
     def confirm
       # we need a pending transaction if one doesn't exit already
-      payment = @order.payments.pending.where(:payment_method_id => @payment_method.id).first_or_initialize
+      payment = @order.payments.pending.where(:payment_method_id => @payment_method.id).first_or_initialize(:amount => @order.total)
       if payment.source.blank?
         transaction = PaypalWebsitePaymentsStandardTransaction.create!
         payment.update_attribute(:source, transaction)
