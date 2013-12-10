@@ -97,8 +97,7 @@ module Spree
     end
 
     def correct_amount?
-      # TODO should also validate proper currency!
-      order.try(:total) == amount
+      order.total == amount && order.currency == currency
     end
 
     def business
@@ -124,6 +123,10 @@ module Spree
     def amount
       # params['auth_amount'].try(:to_d) # different for auth&capture vs. sale?
       params['mc_gross'].try(:to_d)
+    end
+
+    def currency
+      params['mc_currency']
     end
 
     def payment_date=(date)
