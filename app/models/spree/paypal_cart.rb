@@ -74,8 +74,7 @@ module Spree
     end
 
     def apply_promo
-      # TODO apply promo
-      # @params.merge!(:discount_amount_cart => ...)
+      @params.merge!(:discount_amount_cart => @order.promo_total) if @order.promo_total > 0
     end
 
     def add_order_line_params
