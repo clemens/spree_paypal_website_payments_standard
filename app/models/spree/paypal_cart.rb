@@ -28,7 +28,6 @@ module Spree
     end
 
     def add_order_params
-      # TODO tax_cart?
       # see https://www.x.com/developers/paypal/documentation-tools/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables
       @params.merge!(
         :business         => @payment_method.preferred_business,
@@ -43,6 +42,7 @@ module Spree
         :lc               => localization,
         :charset          => 'UTF-8',
         :address_override => '1', # don't allow user to enter another address
+        :tax_cart         => @order.tax_total,
       )
     end
 
