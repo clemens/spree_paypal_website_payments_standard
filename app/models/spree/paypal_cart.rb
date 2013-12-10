@@ -70,8 +70,7 @@ module Spree
     end
 
     def apply_shipping_costs
-      # TODO
-      # @params.merge!(:shipping_1 => ...)
+      @params.merge!(:shipping_1 => @order.ship_total)
     end
 
     def apply_promo
