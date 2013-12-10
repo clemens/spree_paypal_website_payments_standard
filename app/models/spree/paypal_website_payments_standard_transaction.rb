@@ -79,13 +79,12 @@ module Spree
         raise TransactionFailedError.new("Transaction failed (not pending/completed): #{params.inspect}")
       end
 
-      # TODO Should I set the order to completed here? otherwise the order won't be set to complete
-      # if the user doesn't return from PayPal ...
-      #
-      # # FIXME duplication with controller
-      # # really? - at least that's how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
-      # order.state = 'complete'
-      # order.save
+      # FIXME duplication with controller
+      # really? - at least that's how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
+      unless order.state == 'complete'
+        order.state = 'complete'
+        order.save
+      end
     end
 
     def legit?
