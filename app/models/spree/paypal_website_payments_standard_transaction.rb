@@ -36,9 +36,7 @@ module Spree
     serialize :params
 
     def self.process(request)
-      notification = create!(:request => request) do |notification|
-        notification.order_id = request.params['order_id']
-      end
+      notification = create!(:request => request)
 
       notification.process!
       notification.legit?
@@ -48,18 +46,22 @@ module Spree
       @request = request
       self.params = request.params
       self.query_string = request.body.read
+      self.order_id = order.id
+    end
+
+    def payment
+      @payment ||= Payment.find_by_identifier!(params['invoice'])
     end
 
     def order
-      @order ||= Order.find_by_number!(params['order_id'] || request.params['order_id'])
+      @order ||= payment.order
     end
 
     def payment_method
-      @payment_method ||= PaymentMethod.find(params['payment_method_id'] || request.params['payment_method_id'])
+      @payment_method ||= payment.payment_method
     end
 
     def process!
-      payment = order.payments.pending.where(:payment_method_id => payment_method.id).first_or_initialize(:amount => order.total)
       payment.source = self
       payment.save!
 

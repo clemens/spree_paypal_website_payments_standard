@@ -2,9 +2,10 @@
 
 module Spree
   class PaypalCart
-    def initialize(order, payment_method, params = {})
-      @order = order
-      @payment_method = payment_method
+    def initialize(payment, params = {})
+      @payment = payment
+      @order = payment.order
+      @payment_method = payment.payment_method
       @params = params
 
       apply_params
@@ -34,7 +35,7 @@ module Spree
         :cmd              => '_cart',
         :paymentaction    => @payment_method.auto_capture? ? 'sale' : 'authorization', # authorization, sale or order
         :upload           => '1',
-        :invoice          => @order.number,
+        :invoice          => @payment.identifier,
         :currency_code    => @order.currency,
         :rm               => '0', # 0 = GET with variables, 1 = GET without variables, 2 = POST with variables
         :no_shipping      => '1', # 0 = shipping address optional, 1 = shipping address disabled, 2 = shipping address required
