@@ -7,12 +7,7 @@ module Spree
       @payment_method = payment_method
       @params = params
 
-      add_order_params
-      add_order_line_params
-
-      apply_addresses
-      apply_shipping_costs
-      apply_promo
+      apply_params
     end
 
     def redirect_url
@@ -22,6 +17,15 @@ module Spree
     end
 
   private
+
+    def apply_params
+      add_order_params
+      add_order_line_params
+
+      apply_addresses
+      apply_shipping_costs
+      apply_promo
+    end
 
     def add_order_params
       # TODO tax_cart?
