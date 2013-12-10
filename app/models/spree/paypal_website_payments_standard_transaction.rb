@@ -61,7 +61,7 @@ module Spree
     def process!
       payment = order.payments.pending.where(:payment_method_id => payment_method.id).first_or_initialize(:amount => order.total)
       payment.source = self
-      payment.save
+      payment.save!
 
       if legit?
         if pending?
