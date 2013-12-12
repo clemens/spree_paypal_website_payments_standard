@@ -80,10 +80,11 @@ module Spree
       end
 
       # FIXME duplication with controller
-      # really? - at least that's how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
+      # really? - at least that's similar how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
       unless order.state == 'complete'
         order.state = 'complete'
-        order.save
+        # manually finalize it because that's what happens after the transition to complete in the state machine
+        order.finalize!
       end
     end
 
