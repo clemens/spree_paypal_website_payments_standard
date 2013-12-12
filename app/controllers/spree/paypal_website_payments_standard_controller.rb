@@ -29,6 +29,7 @@ module Spree
           @order.save
         end
 
+        flash[:commerce_tracking] = "nothing special"
         redirect_to completion_route, :notice => t(:order_processed_successfully)
       else
         render :text => 'PayPal Error. TODO'
