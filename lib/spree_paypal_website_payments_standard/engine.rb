@@ -7,6 +7,10 @@ module SpreePaypalWebsitePaymentsStandard
     config.autoload_paths += %W(#{config.root}/lib)
 
     def self.activate
+      # FIXME: WHY?! :(
+      controller = File.join(File.dirname(__FILE__), '../../app/controllers/spree/paypal_website_payments_standard_controller.rb')
+      Rails.configuration.cache_classes ? require(controller) : load(controller)
+
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
