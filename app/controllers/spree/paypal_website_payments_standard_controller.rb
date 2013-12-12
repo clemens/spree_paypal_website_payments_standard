@@ -36,7 +36,7 @@ module Spree
     end
 
     def notify
-      PaypalWebsitePaymentsStandardTransaction.process(request)
+      PaypalWebsitePaymentsStandardNotification.process(request)
       head(:ok)
     end
 

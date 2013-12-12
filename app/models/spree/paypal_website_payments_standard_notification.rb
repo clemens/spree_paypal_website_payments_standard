@@ -3,7 +3,7 @@
 require 'open-uri'
 
 module Spree
-  class PaypalWebsitePaymentsStandardTransaction < ActiveRecord::Base
+  class PaypalWebsitePaymentsStandardNotification < ActiveRecord::Base
     SUPER_WICKED_PAYPAL_DATE_FORMAT = '%H:%M:%S %b %d, %Y %Z'
     STATUSES = {
       :success => 'VERIFIED',
