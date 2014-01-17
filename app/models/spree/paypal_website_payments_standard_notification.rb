@@ -89,7 +89,7 @@ module Spree
     end
 
     def legit?
-      verified? && correct_business? && correct_amount?
+      verified? && correct_business?
     end
 
     def verified?
@@ -106,10 +106,6 @@ module Spree
 
     def completed?
       payment_status == PAYMENT_STATUSES[:completed]
-    end
-
-    def correct_amount?
-      order.total == amount && order.currency == currency
     end
 
     def business
