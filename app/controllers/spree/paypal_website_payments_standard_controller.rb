@@ -49,7 +49,7 @@ module Spree
   private
 
     def completion_route
-      spree_completed_order_path(@order)
+      order_path(@order)
     end
 
     def set_payment
