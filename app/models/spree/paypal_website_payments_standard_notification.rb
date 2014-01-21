@@ -53,8 +53,17 @@ module Spree
       self.payment_status = params['payment_status']
     end
 
+    def original_payment
+      @original_payment ||= Payment.find_by_identifier!(params['invoice'])
+    end
+
     def payment
-      @payment ||= Payment.find_by_identifier!(params['invoice'])
+      @payment ||= begin
+        # If the original payment has already been completed, use a new one.
+        payment = original_payment.completed? ? original_payment.dup : original_payment
+        # The transaction amount might differ from the payment amount.
+        payment.tap { |payment| payment.update_attribute(:amount, amount) }
+      end
     end
 
     def order
@@ -74,7 +83,7 @@ module Spree
       if pending?
         payment.pend! unless payment.pending?
       elsif completed?
-        payment.complete!
+        payment.complete! unless payment.complete?
       else
         raise TransactionFailedError.new("Transaction failed (not pending/completed): #{params.inspect}")
       end
