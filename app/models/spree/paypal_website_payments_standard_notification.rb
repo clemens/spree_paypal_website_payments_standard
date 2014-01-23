@@ -83,7 +83,7 @@ module Spree
       if pending?
         payment.pend! unless payment.pending?
       elsif completed?
-        payment.complete! unless payment.complete?
+        payment.complete! unless payment.completed?
       else
         raise TransactionFailedError.new("Transaction failed (not pending/completed): #{params.inspect}")
       end
