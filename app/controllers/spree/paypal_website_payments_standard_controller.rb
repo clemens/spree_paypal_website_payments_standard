@@ -1,3 +1,4 @@
+# TODO get rid of instance variables and before_filters
 module Spree
   # TODO can I use CheckoutController as a base?
   class PaypalWebsitePaymentsStandardController < StoreController
@@ -10,9 +11,9 @@ module Spree
       payment = @order.payments.with_state('checkout').where(:payment_method_id => @payment_method.id).first_or_create(:amount => @order.total)
 
       paypal_cart = Spree::PaypalCart.new(payment,
-        :return        => confirm_paypal_website_payments_standard_url(:payment_id => payment),
-        :cancel_return => cancel_paypal_website_payments_standard_url(:payment_id => payment),
-        :notify_url    => notify_paypal_website_payments_standard_url(:payment_id => payment),
+        :return        => confirm_paypal_website_payments_standard_url(:payment_id => payment, :token => @order.token),
+        :cancel_return => cancel_paypal_website_payments_standard_url(:payment_id => payment, :token => @order.token),
+        :notify_url    => notify_paypal_website_payments_standard_url(:payment_id => payment, :token => @order.token),
       )
 
       redirect_to paypal_cart.redirect_url
@@ -30,7 +31,7 @@ module Spree
           @order.finalize!
         end
 
-        flash[:commerce_tracking] = "nothing special"
+        flash[:commerce_tracking] = 'nothing special'
         redirect_to completion_route, :notice => t(:order_processed_successfully)
       else
         render :text => 'PayPal Error. TODO'
@@ -58,6 +59,8 @@ module Spree
 
     def set_order
       @order = @payment.try(:order) || Order.find_by_number!(params[:order_id])
+      session[:access_token] ||= params[:token]
+      authorize! :edit, @order, session[:access_token]
     end
 
     def set_payment_method
