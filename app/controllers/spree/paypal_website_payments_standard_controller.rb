@@ -24,12 +24,7 @@ module Spree
       payment = @order.payments.valid.find_by_id(params[:payment_id])
 
       if payment.present?
-        unless @order.state == 'complete'
-          # really? - at least that's similar how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
-          @order.state = 'complete'
-          # manually finalize it because that's what happens after the transition to complete in the state machine
-          @order.finalize!
-        end
+        PaypalWebsitePaymentsStandardNotification.finalize_order(@order)
 
         flash[:commerce_tracking] = 'nothing special'
         redirect_to completion_route, :notice => t(:order_processed_successfully)

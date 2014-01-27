@@ -42,6 +42,15 @@ module Spree
       notification.legit?
     end
 
+    def self.finalize_order(order)
+      # really? - at least that's similar how other extensions seem to be doing it
+      unless order.state == 'complete'
+        order.state = 'complete'
+        # manually finalize it because that's what happens after the transition to complete in the state machine
+        order.finalize!
+      end
+    end
+
     def request=(request)
       @request = request
 
@@ -85,16 +94,11 @@ module Spree
       elsif completed?
         payment.complete! unless payment.completed?
       else
+        # FIXME Maybe use payment.failure! (at least for actual failures)
         raise TransactionFailedError.new("Transaction failed (not pending/completed): #{params.inspect}")
       end
 
-      # FIXME duplication with controller
-      # really? - at least that's similar how it's done with the spree_paypal_express extension (https://github.com/spree/spree_paypal_express/blob/1-3-stable/app/controllers/spree/checkout_controller_decorator.rb#L110-L111)
-      unless order.state == 'complete'
-        order.state = 'complete'
-        # manually finalize it because that's what happens after the transition to complete in the state machine
-        order.finalize!
-      end
+      self.class.finalize_order(order)
     end
 
     def legit?
