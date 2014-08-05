@@ -75,7 +75,7 @@ module Spree
     end
 
     def apply_promo
-      @params.merge!(:discount_amount_cart => @order.promo_total) if @order.promo_total < 0 # promo is negative!
+      @params.merge!(:discount_amount_cart => @order.promo_total.abs) if @order.promo_total < 0 # promo is negative!
     end
 
     def add_order_line_params
