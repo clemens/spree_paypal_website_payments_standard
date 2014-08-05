@@ -29,7 +29,7 @@ module Spree
     end
 
     def add_order_params
-      # see https://www.x.com/developers/paypal/documentation-tools/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables
+      # see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
       @params.merge!(
         :business         => @payment_method.preferred_business,
         :cmd              => '_cart',
@@ -75,7 +75,7 @@ module Spree
     end
 
     def apply_promo
-      @params.merge!(:discount_amount_cart => @order.promo_total) if @order.promo_total > 0
+      @params.merge!(:discount_amount_cart => @order.promo_total) if @order.promo_total < 0 # promo is negative!
     end
 
     def add_order_line_params
