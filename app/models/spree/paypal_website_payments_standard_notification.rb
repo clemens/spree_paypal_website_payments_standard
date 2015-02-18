@@ -93,9 +93,11 @@ module Spree
         payment.pend! unless payment.pending?
       elsif completed?
         payment.complete! unless payment.completed?
+      elsif expired?
+        payment.void! unless payment.void?
       else
         # FIXME Maybe use payment.failure! (at least for actual failures)
-        raise TransactionFailedError.new("Transaction failed (not pending/completed): #{params.inspect}")
+        raise TransactionFailedError.new("Transaction failed (not pending/completed/expired): #{params.inspect}")
       end
 
       self.class.finalize_order(order)
@@ -119,6 +121,10 @@ module Spree
 
     def completed?
       payment_status == PAYMENT_STATUSES[:completed]
+    end
+
+    def expired?
+      payment_status == PAYMENT_STATUSES[:expired]
     end
 
     def business
