@@ -13,6 +13,6 @@ class CreateSpreePaypalWebsitePaymentsStandardNotifications < ActiveRecord::Migr
     end
 
     add_index :spree_paypal_website_payments_standard_notifications, :order_id, :name => 'idx_paypal_standard_notifications_order_id'
-    add_index :spree_paypal_website_payments_standard_notifications, :transaction_id, :unique => true, :name => 'unique_idx_paypal_standard_notifications_order_id'
+    add_index :spree_paypal_website_payments_standard_notifications, :transaction_id, :unique => true, :name => 'unique_idx_paypal_standard_notifications_transaction_id'
   end
 end
