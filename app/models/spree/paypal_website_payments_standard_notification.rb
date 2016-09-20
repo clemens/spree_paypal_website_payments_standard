@@ -97,7 +97,7 @@ module Spree
 
       if pending?
         payment.pend! unless payment.pending?
-      elsif completed?
+      elsif completed? || reversed? || refunded?
         payment.complete! unless payment.completed?
       elsif expired?
         payment.void! unless payment.void?
@@ -127,6 +127,14 @@ module Spree
 
     def completed?
       payment_status == PAYMENT_STATUSES[:completed]
+    end
+
+    def reversed?
+      payment_status == PAYMENT_STATUSES[:reversed]
+    end
+
+    def refunded?
+      payment_status == PAYMENT_STATUSES[:refunded]
     end
 
     def expired?
