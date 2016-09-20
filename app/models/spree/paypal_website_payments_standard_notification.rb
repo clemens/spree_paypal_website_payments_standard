@@ -69,7 +69,13 @@ module Spree
     def payment
       @payment ||= begin
         # If the original payment has already been completed, use a new one.
-        payment = original_payment.completed? ? original_payment.dup : original_payment
+        payment = if original_payment.completed?
+          payment = original_payment.dup
+          payment.state = nil # Remove the state so we can refund/chargeback completed payments.
+        else
+          original_payment
+        end
+
         # The transaction amount might differ from the payment amount.
         payment.tap { |payment| payment.update_attribute(:amount, amount) }
       end
